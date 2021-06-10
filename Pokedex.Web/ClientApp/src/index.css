@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .type-water {
+        color: #0080ff;
+    }
+    .type-ice {
+        color: #0af;
+    }
+    .type-fighting {
+        color: #a84d3d;
+    }
+    .type-poison {
+        color: #88447a;
+    }
+    .type-psychic {
+        color: #ff227a;
+    }
+    .type-rock {
+        color: #a59249;
+    }
+    .type-dark {
+        color: #573e31;
+    }
+    .type-electric {
+        color: #c90;
+    }
+    .type-ground {
+        color: #bf9926;
+    }
+    .type-fairy {
+        color: #e76de7;
+    }
+    .type-flying {
+        color: #556dff;
+    }              
+    .type-dragon {
+        color: #4e38e9;
+    } 
+    .type-grass {
+        color: #5cb737;
+    } 
+    .type-fire {
+        color: #d52100;
+    } 
+    .type-bug {
+        color: #83901a;
+    } 
+    .type-steel {
+        color: #8e8ea4;
+    }        
+    .type-normal {
+        color: #797964;
+    }   
+    .type-ghost {
+        color: #5454b3;
+    }
+    .main-title {
+        font-weight:bold;
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+        padding: 3px;
+    }                                       
+  }
