@@ -1,50 +1,97 @@
 <template>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-3 flex justify-center items-center p-4"  v-if="is_pokemon_loaded">
-      <div class="w-full">
-          <span class="text-3xl font-bold text-center	">{{normalize(currentPokemonName)}}</span>
-          <img class="object-fit m-auto p-3" :src="`https://img.pokemondb.net/artwork/${$route.params.identifier}.jpg`" />
+  <div v-if="currentPokemon">
+    <section
+      class="flex flex-row justify-center items-center shadow border h-24"
+      :class="`hero-${currentPokemon.pokeTypes[0].identifier}`"
+    >
+      <div class="">
+        <div class="text-white font-bold">
+          <!---->
+          <h1 class=" ">{{ normalize(currentPokemon.identifier) }}</h1>
+          <h2 class="text-center">#{{ currentPokemon.id }}</h2>
+        </div>
+        <!---->
       </div>
+    </section>
+    <div class="flex flex-col items-center">
       <div>
-        <pokedex-data  class="w-full"  />
+        <img :src="require(`../../assets/pokemon/${currentPokemonId}.png`)" />
       </div>
-      <div>
-        <evolution-tree />
+      <flavor-text class="w-11/12" />
+
+      <div class="flex flex-row w-11/12  flex-wrap	justify-around	">
+        <div class="w-2/5 w-full poke-data-box">
+          <pokedex-data />
+        </div>
+
+        <div class="md:w-2/5 w-full poke-data-box">
+          <stats />
+        </div>
+        <div class="w-full poke-data-box">
+          <evolution-tree />
+        </div>
+        <div class="md:w-2/5 w-full poke-data-box">
+          <breeding />
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
-import PokedexData from './PokedexData.vue'
-import EvolutionTree from './EvolutionTree.vue'
+import PokedexData from "./PokedexData.vue";
+import EvolutionTree from "./EvolutionTree.vue";
 
-import {store} from '../../store'
-import {mapGetters} from 'vuex'
+import { store } from "../../store";
+import { mapGetters } from "vuex";
 
-import stringFilters from '../../filters/stringFilters'
+import stringFilters from "../../filters/stringFilters";
+import Stats from "./Stats.vue";
+import FlavorText from "./FlavorText.vue";
+import Breeding from './Breeding.vue';
 
 export default {
-    name: 'Pokemon',
-    components: {
-        PokedexData,
-        EvolutionTree
+  name: "Pokemon",
+  components: {
+    PokedexData,
+    EvolutionTree,
+    Stats,
+    FlavorText,
+    Breeding,
+  },
+  methods: {
+    normalize(text) {
+      return stringFilters.normalizeText(text);
     },
-    methods: {
-      normalize(text) {
-        return stringFilters.normalizeText(text)
-      }
-    },   
-    computed: {
-      ...mapGetters(['currentPokemonName', 'is_pokemon_loaded'])
-    },
-    async beforeRouteUpdate (to, from, next)  {
-        store.dispatch('getEvolutionTreeByIdentifier', to.params.identifier)
-        await store.dispatch('getPokemonByIdentifier', to.params.identifier).then(() => next())
-    },
-    async beforeRouteEnter(to, from, next) {
-        store.dispatch('getEvolutionTreeByIdentifier', to.params.identifier)
-        await store.dispatch('getPokemonByIdentifier', to.params.identifier ).then(() => next())
-    }
-       
-}
-</script>
+  },
+  computed: {
+    ...mapGetters([
+      "currentPokemonName",
+      "currentPokemonId",
+      "currentPokemon",
+      "is_pokemon_loaded",
+    ]),
+  },
+  async beforeRouteUpdate(to, from, next) {
+    store.dispatch("getEvolutionTreeByIdentifier", to.params.identifier);
+    store.dispatch("getStatsByIdentifier", to.params.identifier);
+    store.dispatch("getGenderByIdentifier", to.params.identifier);
+    store.dispatch("getFlavorTextByIdentifier", to.params.identifier);
 
+    await store
+      .dispatch("getPokemonByIdentifier", to.params.identifier)
+      .then(() => next());
+  },
+  async beforeRouteEnter(to, from, next) {
+    store.dispatch("getEvolutionTreeByIdentifier", to.params.identifier);
+    store.dispatch("getStatsByIdentifier", to.params.identifier);
+    store.dispatch("getGenderByIdentifier", to.params.identifier);
+
+    store.dispatch("getFlavorTextByIdentifier", to.params.identifier);
+
+    await store
+      .dispatch("getPokemonByIdentifier", to.params.identifier)
+      .then(() => next());
+  },
+};
+</script>

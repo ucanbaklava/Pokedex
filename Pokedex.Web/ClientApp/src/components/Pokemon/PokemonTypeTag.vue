@@ -8,8 +8,8 @@
         params: { identifier: type},
       })
     "
-    :class="['type-' + type]"
-    class="type-icon"
+    :class="['type-list-' + type]"
+    class="type-icon leading-6"
     >{{ normalizeString(type) }}</a
   >
 </template>
@@ -29,71 +29,5 @@ export default {
 </script>
 
 <style scoped>
-.type-psychic {
-  background-color: #f59 !important;
-}
-.type-grass {
-  background-color: #7c5 !important;
-}
-.type-poison {
-  background-color: #a59 !important;
-}
-.type-water {
-  background-color: #39f !important;
-}
-.type-rock {
-  background-color: #ba6 !important;
-}
-.type-ghost {
-  background-color: #66b !important;
-}
-.type-dragon {
-  background-color: #76e !important;
-}
-.type-flying {
-  background-color: #89f !important;
-}
-.type-electric {
-  background-color: #fc3 !important;
-}
-.type-fire {
-  background-color: #f42 !important;
-}
-.type-normal {
-  background-color: #aa9 !important;
-}
-.type-fairy {
-  background-color: #e9e !important;
-}
-.type-fighting {
-  background-color: #b54 !important;
-}
-.type-ground {
-  background-color: #b54 !important;
-}
-.type-bug {
-  background-color: #ab2 !important;
-}
-.type-dark {
-  background-color: #754 !important;
-}
-.type-icon {
-  display: inline-block;
-  padding: 3px;
-  width: 66px;
-  margin: 3px;
-  margin-bottom: 4px;
-  background: #dbdbdb;
-  border: 1px solid #a3a3a3;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: normal;
-  line-height: 1.5rem;
-  text-align: center;
-  text-shadow: 1px 1px 2px rgb(0 0 0 / 70%);
-  text-transform: uppercase;
-  transition: opacity 0.4s;
-}
+
 </style>
