@@ -1,6 +1,17 @@
 <template>
-    <span class="main-title">Pokémon with <i>{{normalize($route.params.identifier)}}</i></span>
-    <div class="flex flex-col w-1/2 p-3" v-if="currentAbility">
+    <section
+      class="flex flex-row justify-center items-center shadow border bg-green-400 h-24"
+      :class="``"
+    >
+      <div class="">
+        <div class="text-white font-bold">
+          <!---->
+          <h1 class=" ">Pokémon with <i>{{ normalize($route.params.identifier) }}</i> ability</h1>
+        </div>
+        <!---->
+      </div>
+    </section>
+    <div class="flex flex-col md:w-3/4 m-auto w-full p-3" v-if="currentAbility">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg  h-1/3">

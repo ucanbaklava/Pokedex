@@ -7,7 +7,7 @@
       <div class="">
         <div class="text-white font-bold">
           <!---->
-          <h1 class=" ">{{ normalize(currentPokemon.identifier) }}</h1>
+          <h1 class="text-2xl">{{ normalize(currentPokemon.identifier) }}</h1>
           <h2 class="text-center">#{{ currentPokemon.id }}</h2>
         </div>
         <!---->
@@ -15,12 +15,12 @@
     </section>
     <div class="flex flex-col items-center">
       <div>
-        <img :src="require(`../../assets/pokemon/${currentPokemonId}.png`)" />
+         <img :src="require(`../../assets/pokemon/${currentPokemonId}.png`)" class="p-3" />
       </div>
       <flavor-text class="w-11/12" />
 
       <div class="flex flex-row w-11/12  flex-wrap	justify-around	">
-        <div class="w-2/5 w-full poke-data-box">
+        <div class="md:w-2/5 w-full poke-data-box">
           <pokedex-data />
         </div>
 

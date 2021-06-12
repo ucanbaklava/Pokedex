@@ -1,7 +1,7 @@
 <template>
       <the-navbar></the-navbar>
 
-  <div class="container">
+  <div class="container m-auto bg-white">
       <router-view />
   </div>
 </template>

@@ -69,7 +69,7 @@
           ><br />
           <small v-for="(type, index) in item.pokeType" :key="index">
             {{ index > 0 ? "-" : "" }}
-            <a :href="`/pokemon/${type.identifier}`" class="itype grass">{{
+            <a :href="`/pokemon/${type.identifier}`" :class="`type-${type.identifier}`" class="font-bold">{{
               normalize(type.identifier)
             }}</a>
           </small>

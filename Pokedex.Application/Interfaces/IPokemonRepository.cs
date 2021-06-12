@@ -13,5 +13,8 @@ namespace Pokedex.Application.Interfaces
         Task<List<Evolution>> GetEvolutionTreeByIdentifier(string identifier);
         Task<List<Pokemon>> ListPokemonsByType(string identifier);
         Task<List<Pokemon>> GetAbilityByIdentifier(string identifier);
+        Task<List<PokemonStat>> GetPokemonStats(string identifier);
+        Task<PokemonFlavorText> GetPokemonFlavorText(string identifier);
+        Task<Gender> GetPokemonGender(string identifier);
     }
 }

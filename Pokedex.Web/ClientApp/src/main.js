@@ -4,4 +4,16 @@ import router from './router'
 import {store} from './store'
 import './index.css'
 
-createApp(App).use(store).use(router).mount('#app')
+
+// or with options
+//const loadimage = require('./assets/loading.gif')
+
+
+// or with options
+
+
+
+createApp(App)
+    .use(store)
+    .use(router)
+    .mount('#app')

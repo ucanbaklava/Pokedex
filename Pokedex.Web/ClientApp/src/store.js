@@ -7,6 +7,9 @@ export const store = createStore({
     state: {
         currentPokemon: null,
         currentAbility: null,
+        currentStats: null,
+        currentPokemonFlavorText: null,
+        currentGender: null,
         searchResults: null,
         evolutionTree: null,
         pokemonListByType: null
@@ -24,9 +27,18 @@ export const store = createStore({
         SET_EVOLUTION_TREE(state, data) {
             state.evolutionTree = data
         },
+        SET_CURRENT_STATS(state, stats) {
+            state.currentStats = stats
+        },        
         SET_POKEMON_LIST_BY_TYPE(state, data) {
             state.pokemonListByType = data
-        }        
+        },        
+        SET_CURRENT_POKEMON_FLAVOR_TEXT(state, data) {
+            state.currentPokemonFlavorText = data
+        },
+        SET_CURRENT_GENDER(state, data) {
+            state.currentGender = data
+        }             
     },
     getters: {
         currentPokemon(state) {
@@ -38,6 +50,18 @@ export const store = createStore({
         currentPokemonName(state) {
             return state.currentPokemon.identifier
         },
+        currentPokemonId(state) {
+            return state.currentPokemon.id
+        },   
+        currentGender(state) {
+            return state.currentGender
+        },      
+        currentStats(state) {
+            return state.currentStats
+        },
+        currentPokemonFlavorText(state) {
+            return state.currentPokemonFlavorText
+        },        
         searchResults(state) {
             return state.searchResults
         },
@@ -59,6 +83,8 @@ export const store = createStore({
             })
         },
         async getPokemonByIdentifier( {commit}, name) {
+            commit('SET_SEARCH_RESULTS', null)
+
             commit('SET_CURRENT_POKEMON', null)
             console.log("geldim")
             return await PokedexService.getByIdentifier(name).then(result => 
@@ -79,6 +105,24 @@ export const store = createStore({
                 commit('SET_CURRENT_ABILITY', result.data)
             })
         },
+        getGenderByIdentifier({commit}, identifier) {
+            commit('SET_CURRENT_GENDER', null)
+            return PokedexService.getGenderByIdentifier(identifier).then(result => {
+                commit('SET_CURRENT_GENDER', result.data)
+            })
+        },        
+        getStatsByIdentifier({commit}, identifier) {
+            commit('SET_CURRENT_STATS', null)
+            return PokedexService.getStatsByIdentifier(identifier).then(result => {
+                commit('SET_CURRENT_STATS', result.data)
+            })
+        },     
+        getFlavorTextByIdentifier({commit}, identifier) {
+            commit('SET_CURRENT_POKEMON_FLAVOR_TEXT', null)
+            return PokedexService.getFlavorTextByIdentifier(identifier).then(result => {
+                commit('SET_CURRENT_POKEMON_FLAVOR_TEXT', result.data)
+            })
+        },           
         getEvolutionTreeByIdentifier( {commit}, name) {
             commit('SET_EVOLUTION_TREE', null)
             return PokedexService.getEvolutionTreeByIdentifier(name).then(result => 
@@ -87,7 +131,7 @@ export const store = createStore({
             })
         },                  
         searchPokemon({commit}, identifier) {
-            if(!identifier)  commit('SET_SEARCH_RESULTS', null)
+            commit('SET_SEARCH_RESULTS', null)
             PokedexService.searchPokemonByIdentifier(identifier).then(result => {
                 commit('SET_SEARCH_RESULTS', result.data)
             })
