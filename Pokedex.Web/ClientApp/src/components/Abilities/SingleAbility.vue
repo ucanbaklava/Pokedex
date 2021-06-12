@@ -28,8 +28,8 @@
                     <tr v-for="(ability, index) in currentAbility" :key="index">
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
-                        <div class="flex-shrink-0 h-10 w-10">
-                            <img class="h-15 w-15 rounded-full" :src="`https://img.pokemondb.net/sprites/sword-shield/icon/${ability.identifier}.png`">
+                        <div class="flex-shrink-0">
+                            <img class="rounded-full" :src="`https://img.pokemondb.net/sprites/sword-shield/icon/${ability.identifier}.png`">
                         </div>
                         <div class="ml-4">
                             <div class="text-sm font-medium text-gray-900">
@@ -42,15 +42,17 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm text-gray-900"> 
-                            {{normalize(ability.identifier)}}
+                            <router-link class="pokemon-link" :to="{'name': 'Pokemon', params: {identifier: ability.identifier  }}"  >{{normalize(ability.identifier)}}</router-link>
                         </div>
-                        <div class="text-sm text-gray-500">Optimization</div>
-                    </td>
+                            <router-link v-for="(type, index) in ability.pokeTypes" :key="index"  :to="{'name': 'PokemonList', params: {identifier: type.identifier  }}" :class="['type-list-' + type.identifier]" class="type-icon leading-3">
+                                {{ normalize(type.identifier) }}
+                            </router-link>
+                      </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div class="text-sm text-gray-900" v-if="!ability.abilities[0].is_hidden" ><router-link href="" :to="{name: 'SingleAbility', params: { identifier: ability.abilities[0].identifier }}"  >{{normalize(ability.abilities[0].identifier)}}</router-link></div>
                         <div class="text-sm text-gray-900" v-else >-</div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" v-if="ability.abilities.length  > 1">
                         <div class="text-sm text-gray-900" v-if="!ability.abilities[1].is_hidden" ><router-link href="" :to="{name: 'SingleAbility', params: { identifier: ability.abilities[1].identifier }}"  >{{normalize(ability.abilities[1].identifier)}}</router-link></div>
                         <div class="text-sm text-gray-900" v-else >-</div>
 
