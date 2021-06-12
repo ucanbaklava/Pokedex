@@ -65,5 +65,24 @@ namespace Pokedex.Web.Controllers
             var data = await unitOfWork.Pokemons.GetAbilityByIdentifier(identifier);
             return Ok(data);
         }
+
+        [HttpGet("stats/{identifier}")]
+        public async Task<IActionResult> GetPokemonStatsByIdentifier(string identifier)
+        {
+            var data = await unitOfWork.Pokemons.GetPokemonStats(identifier);
+            return Ok(data);
+        }
+        [HttpGet("flavortext/{identifier}")]
+        public async Task<IActionResult> GetPokemonFlavorText(string identifier)
+        {
+            var data = await unitOfWork.Pokemons.GetPokemonFlavorText(identifier);
+            return Ok(data);
+        }
+        [HttpGet("gender/{identifier}")]
+        public async Task<IActionResult> GetPokemonGender(string identifier)
+        {
+            var data = await unitOfWork.Pokemons.GetPokemonGender(identifier);
+            return Ok(data);
+        }
     }
 }
