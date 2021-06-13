@@ -1,5 +1,5 @@
 <template>
-    <div class="poke-data-box">
+    <div class="poke-data-box" v-if="currentPokemonFlavorText">
         <span class="flavor_text_title">Flavor text from <i>Pokémon {{normalize(currentPokemonFlavorText.identifier)}}:</i></span>
         {{currentPokemonFlavorText.flavor_text}}
     </div>
