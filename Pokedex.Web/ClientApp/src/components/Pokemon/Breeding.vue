@@ -1,11 +1,12 @@
 <template>
+<div v-if="currentGender">
     <span class="text-3xl font-bold mb-10">Breeding</span>
     <table>
       <tbody>
         <tr>
           <th>Egg Groups:</th>
           <td>
-            {{ currentGender.identifier[0] }}
+            {{ normalize(currentGender.identifier[0]) }}
           </td>
         </tr>
         <tr>
@@ -22,14 +23,21 @@
         </tr>
       </tbody>
     </table>
+</div>    
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import stringFilters from '../../filters/stringFilters'
 export default {
   computed: {
     ...mapGetters(["currentGender"]),
   },
+  methods: {
+    normalize(text) {
+      return stringFilters.normalizeText(text)
+    }
+  }
 };
 </script>
 
