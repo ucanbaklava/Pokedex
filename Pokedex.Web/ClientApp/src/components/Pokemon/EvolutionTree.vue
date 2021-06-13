@@ -69,9 +69,9 @@
           ><br />
           <small v-for="(type, index) in item.pokeType" :key="index">
             {{ index > 0 ? "-" : "" }}
-            <a :href="`/pokemon/${type.identifier}`" :class="`type-${type.identifier}`" class="font-bold">{{
+            <router-link :to="{name: 'PokemonList', params: {identifier: type.identifier}}" :class="`type-${type.identifier}`" class="font-bold">{{
               normalize(type.identifier)
-            }}</a>
+            }}</router-link>
           </small>
         </span>
       </div>
@@ -85,7 +85,6 @@
 
 <script>
 import stringFilters from "../../filters/stringFilters";
-import arrayFilters from "../../filters/arrayFilters"
 import { mapGetters } from "vuex";
 export default {
   name: "EvolutionTree",
@@ -100,9 +99,6 @@ export default {
   methods: {
     normalize(text) {
       return stringFilters.normalizeText(text);
-    },
-    sortArrayAsc(item) {
-        return arrayFilters.sortByAsc(item)
     }
   },
 };
