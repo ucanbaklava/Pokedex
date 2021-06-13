@@ -16,5 +16,7 @@ namespace Pokedex.Application.Interfaces
         Task<List<PokemonStat>> GetPokemonStats(string identifier);
         Task<PokemonFlavorText> GetPokemonFlavorText(string identifier);
         Task<Gender> GetPokemonGender(string identifier);
+        Task<List<PokemonListDetail>> SearchPokemonDetailed(string identifier);
+        Task<List<PokemonMove>> GetPokemonMovesLevel(string identifier);
     }
 }

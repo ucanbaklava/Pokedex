@@ -415,5 +415,82 @@ namespace Pokedex.Infrastructure.Repositories
                 return result.ToList();
             }
         }
+
+        public async Task<List<PokemonListDetail>> SearchPokemonDetailed(string identifier)
+        {
+            var parameters = new { Identifier = identifier };
+            var sql = @"  select ps.id, ps.identifier, t.id, t.identifier, s.id, s.identifier , ps2.base_stat, a.id, a.identifier, pa.is_hidden from pokemon_species ps 
+                  join pokemon_types pt on pt.pokemon_id = ps.id 
+                  join types t on t.id = pt.type_id 
+                  join pokemon_abilities pa on pa.pokemon_id = ps.id 
+                  join abilities a on a.id = pa.ability_id 
+                  join pokemon_stats ps2 on ps2.pokemon_id = ps.id 
+                  join stats s on s.id = ps2.stat_id 
+                  where ps.identifier ilike '%'  || @Identifier || '%'";
+
+
+
+            var pokeDictionary = new Dictionary<int, PokemonListDetail>();
+
+            using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<PokemonListDetail, PokeType, PokemonStat, Ability, PokemonListDetail>(sql, (p, pt, ps, a) =>
+                {
+                    PokemonListDetail pokemonDetail;
+                    if (!pokeDictionary.TryGetValue(p.id, out pokemonDetail))
+                    {
+                        pokemonDetail = p;
+                        pokeDictionary.Add(p.id, pokemonDetail);
+                    }
+
+                    if (!pokemonDetail.PokeTypes.Any(x => x.id == pt.id ))
+                    {
+                        pokemonDetail.PokeTypes.Add(pt);
+                    }
+
+
+                    if (!pokemonDetail.PokemonStats.Any(x => x.id == ps.id))
+                    {
+                        pokemonDetail.PokemonStats.Add(ps);
+                    }
+
+                    if (!pokemonDetail.Abilities.Any(x => x.id == a.id))
+                    {
+                        pokemonDetail.Abilities.Add(a);
+                    }
+                    return pokemonDetail;
+                }, parameters, splitOn: "id,id,id");
+
+                    return result.Distinct().ToList();
+            }
+
+        }
+
+        public async Task<List<PokemonMove>> GetPokemonMovesLevel(string identifier)
+        {
+            var parameters = new { Identifier = identifier };
+            var sql = @"  select pm.move_id, pm.level, m.identifier as ability_identifier, t.identifier as ability_type, mdc.identifier as move_category, m.power, m.accuracy, m.pp, mft.flavor_text  from pokemon_moves pm 
+                      join moves m on m.id = pm.move_id 
+                      join pokemon_species ps on ps.id = pm.pokemon_id 
+                      join types t on t.id = m.type_id 
+                      join move_damage_classes mdc on mdc.id = m.damage_class_id 
+                      join move_flavor_text mft on mft.move_id = m.id 
+                      where ps.identifier = @Identifier and pm.pokemon_move_method_id = 1 and mft.version_group_id = 20
+                      order by pm.level asc";
+
+
+
+
+            using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<PokemonMove>(sql, parameters);
+
+                return result.ToList();
+            }
+
+        }
+
     }
 }
