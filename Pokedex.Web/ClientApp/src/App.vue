@@ -12,10 +12,9 @@ import TheNavbar from './components/TheNavbar.vue'
 export default {
   name: 'App',
   components: {
-    TheNavbar
+    TheNavbar,
   },
-  mounted(){
-  },
+
   computed: {
     currentPokemon() {
       console.log(this)

@@ -66,7 +66,6 @@ export default {
 
 <style scoped>
 ul {
-  position: absolute;
   background-color: #363636;
   z-index: 10;
   width: 100%;

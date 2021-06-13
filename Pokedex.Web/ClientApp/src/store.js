@@ -11,8 +11,10 @@ export const store = createStore({
         currentPokemonFlavorText: null,
         currentGender: null,
         searchResults: null,
+        detailedSearchResults: [],
         evolutionTree: null,
-        pokemonListByType: null
+        pokemonListByType: null,
+        pokemonMovesByLevel: null
     },
     mutations: {
         SET_CURRENT_POKEMON(state, pokemon) {
@@ -38,6 +40,12 @@ export const store = createStore({
         },
         SET_CURRENT_GENDER(state, data) {
             state.currentGender = data
+        },
+        SET_DETAILED_SEARCH_RESULTS(state, data) {
+            state.detailedSearchResults = data
+        },
+        SET_POKEMON_MOVES_BY_LEVEL(state, data) {
+            state.pokemonMovesByLevel = data
         }             
     },
     getters: {
@@ -65,11 +73,17 @@ export const store = createStore({
         searchResults(state) {
             return state.searchResults
         },
+        detailedSearchResults(state) {
+            return state.detailedSearchResults
+        },
         evolutionTree(state) {
             return state.evolutionTree
         },
         pokemonListByType(state) {
             return state.pokemonListByType
+        },
+        pokemonMovesByLevel(state) {
+            return state.pokemonMovesByLevel
         },
         is_pokemon_loaded (state) {
             return !!state.currentPokemon
@@ -129,12 +143,24 @@ export const store = createStore({
             {
                 commit('SET_EVOLUTION_TREE', result.data)
             })
-        },                  
+        },     
+        getAbilitiesByLevel({commit}, identifier) {
+            commit('SET_POKEMON_MOVES_BY_LEVEL', null)
+            return PokedexService.getMovesByLevel(identifier).then(result => {
+                commit('SET_POKEMON_MOVES_BY_LEVEL', result.data)
+            })
+        },             
         searchPokemon({commit}, identifier) {
             commit('SET_SEARCH_RESULTS', null)
             PokedexService.searchPokemonByIdentifier(identifier).then(result => {
                 commit('SET_SEARCH_RESULTS', result.data)
             })
-        }
+        },
+        searchPokemonDetailed({commit}, identifier) {
+            commit('SET_DETAILED_SEARCH_RESULTS', [])
+            PokedexService.searchPokemonDetailed(identifier).then(result => {
+                commit('SET_DETAILED_SEARCH_RESULTS', result.data)
+            })
+        }        
     }
 })

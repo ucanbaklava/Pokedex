@@ -28,8 +28,14 @@ class PokedexService {
     getPokemonByName(name) {
         return https.get(`/pokemon/${name}`)
     }
+    getMovesByLevel(identifier) {
+        return https.get(`/pokemon/moves_level/${identifier}`)
+    }
     searchPokemonByIdentifier(identifier) {
         return https.get(`/pokemon/search/${identifier}`)
+    }
+    searchPokemonDetailed(identifier) {
+        return https.get(`/pokemon/searchdetailed/${identifier}`)
     }
 }
 
