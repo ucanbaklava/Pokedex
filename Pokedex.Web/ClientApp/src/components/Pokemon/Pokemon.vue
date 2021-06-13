@@ -15,7 +15,10 @@
     </section>
     <div class="flex flex-col items-center">
       <div>
-         <img :src="require(`../../assets/pokemon/${currentPokemonId}.png`)" class="p-3" />
+        <img
+          :src="getImage(currentPokemonId)"
+          class="p-3"
+        />
       </div>
       <flavor-text class="w-11/12" />
 
@@ -33,6 +36,9 @@
         <div class="md:w-2/5 w-full poke-data-box">
           <breeding />
         </div>
+        <div class="w-full poke-data-box">
+          <moves />
+        </div>
       </div>
     </div>
   </div>
@@ -48,20 +54,35 @@ import { mapGetters } from "vuex";
 import stringFilters from "../../filters/stringFilters";
 import Stats from "./Stats.vue";
 import FlavorText from "./FlavorText.vue";
-import Breeding from './Breeding.vue';
+import Breeding from "./Breeding.vue";
+import Moves from './Moves.vue';
 
 export default {
   name: "Pokemon",
+  data() {
+    return {
+      defaultImg: 'require("@/assets/pokemon.png")',
+    };
+  },
   components: {
     PokedexData,
     EvolutionTree,
     Stats,
     FlavorText,
     Breeding,
+    Moves,
   },
   methods: {
     normalize(text) {
       return stringFilters.normalizeText(text);
+    },
+    getImage(id) {
+
+      try {
+        return require(`@/assets/pokemon/${id}.png`)
+      } catch (e) {
+        return require(`@/assets/pokemon.png`)
+      }
     },
   },
   computed: {
@@ -77,6 +98,7 @@ export default {
     store.dispatch("getStatsByIdentifier", to.params.identifier);
     store.dispatch("getGenderByIdentifier", to.params.identifier);
     store.dispatch("getFlavorTextByIdentifier", to.params.identifier);
+    store.dispatch("getAbilitiesByLevel", to.params.identifier);
 
     await store
       .dispatch("getPokemonByIdentifier", to.params.identifier)
@@ -86,8 +108,8 @@ export default {
     store.dispatch("getEvolutionTreeByIdentifier", to.params.identifier);
     store.dispatch("getStatsByIdentifier", to.params.identifier);
     store.dispatch("getGenderByIdentifier", to.params.identifier);
-
     store.dispatch("getFlavorTextByIdentifier", to.params.identifier);
+    store.dispatch("getAbilitiesByLevel", to.params.identifier);
 
     await store
       .dispatch("getPokemonByIdentifier", to.params.identifier)

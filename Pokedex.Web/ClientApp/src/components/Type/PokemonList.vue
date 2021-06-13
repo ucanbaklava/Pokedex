@@ -6,7 +6,7 @@
       <div class="">
         <div class="text-white font-bold">
           <!---->
-          <h1 class=" ">{{ normalize($route.params.identifier) }}</h1>
+          <h1 class=" "><i>{{ normalize($route.params.identifier) }}</i> type Pokémon </h1>
         </div>
         <!---->
       </div>
