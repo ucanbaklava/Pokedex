@@ -2,15 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Pokedex.Application.Interfaces;
 using Pokedex.Domain.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Pokedex.Infrastructure.Repositories
 {
-    public class PokemonRepository: IPokemonRepository
+    public class PokemonRepository : IPokemonRepository
     {
         private readonly IConfiguration configuration;
         public PokemonRepository(IConfiguration configuration)
@@ -21,12 +19,12 @@ namespace Pokedex.Infrastructure.Repositories
         public async Task<List<Pokemon>> GetAbilityByIdentifier(string identifier)
         {
             var parameters = new { Identifier = identifier };
-            var sql = @"  with pokemons as(
-                     select ps.id from pokemon_species ps 
-                     join pokemon_abilities pa  on pa.pokemon_id = ps.id 
-                     join abilities a on a.id = pa.ability_id
-                     where a.identifier = @Identifier
-                     ), abilities as (
+            var sql = @"with pokemons as(
+                        select ps.id from pokemon_species ps 
+                        join pokemon_abilities pa  on pa.pokemon_id = ps.id 
+                        join abilities a on a.id = pa.ability_id
+                        where a.identifier = @Identifier
+                        ), abilities as (
 	                    select ps2.id, ps2.identifier, t.id, t.identifier, a2.id, a2.identifier, pa2.is_hidden from pokemon_species ps2 
 	                    join pokemon_abilities pa2 on pa2.pokemon_id = ps2.id 
 	                    join pokemon_types pt on pt.pokemon_id = ps2.id 
@@ -34,7 +32,7 @@ namespace Pokedex.Infrastructure.Repositories
 	                    join abilities a2 on a2.id = pa2.ability_id 
 	                    where ps2.id in (select id from pokemons)
                     	order by ps2.id
-                     ) select * from abilities ";
+                    ) select * from abilities ";
 
             var pokeDictionary = new Dictionary<int, Pokemon>();
 
@@ -64,8 +62,6 @@ namespace Pokedex.Infrastructure.Repositories
 
                         return pokeEntry;
                     }, parameters, splitOn: "id,id,id");
-
-
                 return result.Distinct().ToList();
             }
         }
@@ -83,14 +79,7 @@ namespace Pokedex.Infrastructure.Repositories
 
         public async Task<Pokemon> GetByIdAsync(int id)
         {
-            var parameters = new { id = id};
-            /*var sql = @"select p.*, ab.*, types.* from pokemon p 
-                inner join pokemon_abilities pa on p.id = pa.pokemon_id 
-                inner join abilities ab on pa.ability_id = ab.id
-                inner join pokemon_types ON pokemon_types.pokemon_id = p.id
-                inner join types on types.id = pokemon_types.type_id
-                where p.id = @id
-                ";*/
+            var parameters = new { id = id };
             var sql = @"select ps.id, ps.identifier, p.height, p.weight, p.base_experience, p.order, ph.identifier as habitat,  ab.*,pa.is_hidden,  types.* from pokemon_species ps 
                 inner join pokemon_abilities pa on ps.id = pa.pokemon_id
                 inner join abilities ab on pa.ability_id = ab.id
@@ -99,7 +88,6 @@ namespace Pokedex.Infrastructure.Repositories
                 join pokemon_habitats ph on ph.id = ps.habitat_id
                 join pokemon p on p.id = ps.id
                 where ps.id = 4 ";
-
             var pokeDictionary = new Dictionary<int, Pokemon>();
 
             using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -128,8 +116,6 @@ namespace Pokedex.Infrastructure.Repositories
 
                         return pokeEntry;
                     }, parameters, splitOn: "id, id, id");
-
-
                 return result.First();
             }
 
@@ -138,22 +124,20 @@ namespace Pokedex.Infrastructure.Repositories
         public async Task<Pokemon> GetByIdentifier(string identifier)
         {
             var parameters = new { Identifier = identifier };
-
             var sql = @"with flavor_texts as(
-	                select distinct on(aft.ability_id) aft.ability_id ,aft.flavor_text from ability_flavor_text aft 
-	                where aft.language_id = 9
-                ), pokemons as (                  
-                   
-                select ps.id, ps.identifier, p.height, p.weight, p.base_experience, p.order, ph.identifier as habitat,  ab.*, aft.flavor_text , pa.is_hidden,  types.* from pokemon_species ps 
-                                inner join pokemon_abilities pa on ps.id = pa.pokemon_id 
-                                inner join abilities ab on pa.ability_id = ab.id
-                                inner join pokemon_types ON pokemon_types.pokemon_id = ps.id
-                                inner join types on types.id = pokemon_types.type_id
-                                join flavor_texts aft on aft.ability_id = pa.ability_id 
-                                left join pokemon_habitats ph on ph.id = ps.habitat_id
-                                join pokemon p on p.id = ps.id 
-                                where ps.identifier = @Identifier
-                ) select * from pokemons";
+	                    select distinct on(aft.ability_id) aft.ability_id ,aft.flavor_text from ability_flavor_text aft 
+	                    where aft.language_id = 9
+                        ), pokemons as (                  
+                        select ps.id, ps.identifier, p.height, p.weight, p.base_experience, p.order, ph.identifier as habitat,  ab.*, aft.flavor_text , pa.is_hidden,  types.* from pokemon_species ps 
+                        inner join pokemon_abilities pa on ps.id = pa.pokemon_id 
+                        inner join abilities ab on pa.ability_id = ab.id
+                        inner join pokemon_types ON pokemon_types.pokemon_id = ps.id
+                        inner join types on types.id = pokemon_types.type_id
+                        join flavor_texts aft on aft.ability_id = pa.ability_id 
+                        left join pokemon_habitats ph on ph.id = ps.habitat_id
+                        join pokemon p on p.id = ps.id 
+                        where ps.identifier = @Identifier
+                        ) select * from pokemons";
 
             var pokeDictionary = new Dictionary<int, Pokemon>();
 
@@ -184,27 +168,12 @@ namespace Pokedex.Infrastructure.Repositories
                         return pokeEntry;
                     }, parameters, splitOn: "id,id,id");
 
-
                 return result.First();
             }
         }
-
         public async Task<List<Evolution>> GetEvolutionTreeByIdentifier(string identifier)
         {
             var parameters = new { Identifier = identifier };
-            /*var sql = @"with recursive parent as (
-	            select ps.id, ps.identifier, ps.evolves_from_species_id from pokemon_species ps
-	            where ps.identifier = @Identifier
-		            union all
-	            select ps2.id, ps2.identifier, ps2.evolves_from_species_id from pokemon_species ps2
-	            join parent on parent.id = ps2.evolves_from_species_id 
-            ), tree as (
-	            select ps.id, ps.identifier, ps.evolves_from_species_id from pokemon_species ps
-	            where ps.id = (select max(id) from parent)
-	            union all 
-	            select ps.id, ps.identifier, ps.evolves_from_species_id from pokemon_species ps
-	            join tree on tree.evolves_from_species_id = ps.id
-            ) select * from tree";*/
             var evoDictionary = new Dictionary<int, Evolution>();
 
             var sql = @"with recursive parent as (
@@ -242,7 +211,7 @@ namespace Pokedex.Infrastructure.Repositories
             {
                 connection.Open();
                 var result = await connection.QueryAsync<Evolution, PokeType, Evolution>(sql,
-                    (e, pt) => 
+                    (e, pt) =>
                     {
                         if (e == null)
                         {
@@ -257,12 +226,11 @@ namespace Pokedex.Infrastructure.Repositories
 
                         if (!pokeEvolution.PokeType.Any(x => x.id == pt.id))
                         {
-                            pokeEvolution.PokeType.Add(pt);                        
+                            pokeEvolution.PokeType.Add(pt);
                         }
                         return pokeEvolution;
 
                     }, parameters, splitOn: "id,id");
-
 
                 return result.Distinct().ToList();
             }
@@ -314,7 +282,7 @@ namespace Pokedex.Infrastructure.Repositories
             using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Gender, string, Gender>(sql, (g,x) =>
+                var result = await connection.QueryAsync<Gender, string, Gender>(sql, (g, x) =>
                 {
                     Gender gender;
 
@@ -325,13 +293,13 @@ namespace Pokedex.Infrastructure.Repositories
                         dict.Add(g.id, gender);
                     }
 
-                    else if(dict.TryGetValue(g.id, out gender))
+                    else if (dict.TryGetValue(g.id, out gender))
                     {
                         gender.identifier.Add(x);
                     }
 
                     return gender;
-                }, parameters, splitOn:"id,identifier");
+                }, parameters, splitOn: "id,identifier");
 
                 return result.FirstOrDefault();
             }
@@ -395,7 +363,6 @@ namespace Pokedex.Infrastructure.Repositories
 
                     }, parameters, splitOn: "id,id");
 
-
                 return result.Distinct().ToList();
             }
         }
@@ -411,7 +378,6 @@ namespace Pokedex.Infrastructure.Repositories
                 connection.Open();
                 var result = await connection.QueryAsync<string>(
                     sql, parameters);
-
                 return result.ToList();
             }
         }
@@ -428,8 +394,6 @@ namespace Pokedex.Infrastructure.Repositories
                   join stats s on s.id = ps2.stat_id 
                   where ps.identifier ilike '%'  || @Identifier || '%'";
 
-
-
             var pokeDictionary = new Dictionary<int, PokemonListDetail>();
 
             using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -444,7 +408,7 @@ namespace Pokedex.Infrastructure.Repositories
                         pokeDictionary.Add(p.id, pokemonDetail);
                     }
 
-                    if (!pokemonDetail.PokeTypes.Any(x => x.id == pt.id ))
+                    if (!pokemonDetail.PokeTypes.Any(x => x.id == pt.id))
                     {
                         pokemonDetail.PokeTypes.Add(pt);
                     }
@@ -462,7 +426,7 @@ namespace Pokedex.Infrastructure.Repositories
                     return pokemonDetail;
                 }, parameters, splitOn: "id,id,id");
 
-                    return result.Distinct().ToList();
+                return result.Distinct().ToList();
             }
 
         }
@@ -470,17 +434,14 @@ namespace Pokedex.Infrastructure.Repositories
         public async Task<List<PokemonMove>> GetPokemonMovesLevel(string identifier)
         {
             var parameters = new { Identifier = identifier };
-            var sql = @"  select pm.move_id, pm.level, m.identifier as ability_identifier, t.identifier as ability_type, mdc.identifier as move_category, m.power, m.accuracy, m.pp, mft.flavor_text  from pokemon_moves pm 
-                      join moves m on m.id = pm.move_id 
-                      join pokemon_species ps on ps.id = pm.pokemon_id 
-                      join types t on t.id = m.type_id 
-                      join move_damage_classes mdc on mdc.id = m.damage_class_id 
-                      join move_flavor_text mft on mft.move_id = m.id 
-                      where ps.identifier = @Identifier and pm.pokemon_move_method_id = 1 and mft.version_group_id = 20
-                      order by pm.level asc";
-
-
-
+            var sql = @"  select pm.move_id, pm.pokemon_move_method_id, pm.level, m.identifier as ability_identifier, t.identifier as ability_type, mdc.identifier as move_category, m.power, m.accuracy, m.pp, mft.flavor_text  from pokemon_moves pm 
+                          join pokemon_species ps on ps.id = pm.pokemon_id 
+                          join moves m  on m.id = pm.move_id 
+                          join types t on t.id = m.type_id 
+                          join move_damage_classes mdc on mdc.id = m.damage_class_id 
+                          join move_flavor_text mft on mft.move_id = m.id 
+                          where ps.identifier = @Identifier and mft.version_group_id = 20
+                          order by pm.level asc";
 
             using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
@@ -492,5 +453,59 @@ namespace Pokedex.Infrastructure.Repositories
 
         }
 
+        public  async Task<List<Pokemon>> GetPokemonsByMove(string identifier)
+        {
+            var parameters = new { Identifier = identifier };
+            var sql = @"select ps.id, ps.identifier, pm.level, t.id, t.identifier, pm.level from pokemon_species ps 
+                        join pokemon_moves pm on pm.pokemon_id = ps.id 
+                        join moves m on m.id = pm.move_id 
+                        join pokemon_types pt on pt.pokemon_id = ps.id 
+                        join types t on t.id = pt.type_id 
+                        where m.identifier = @Identifier";
+
+            var pokeDictionary = new Dictionary<int, Pokemon>();
+
+            using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<Pokemon, PokeType,  Pokemon>(sql,(p, pt) => 
+                {
+                    Pokemon pokeEntry;
+                    if (!pokeDictionary.TryGetValue(p.id, out pokeEntry))
+                    {
+                        pokeEntry = p;
+                        pokeDictionary.Add(p.id, pokeEntry);
+                    }
+
+                    if (!pokeEntry.PokeTypes.Any(x => x.id == pt.id))
+                    {
+                        pokeEntry.PokeTypes.Add(pt);
+                    }
+
+                    return pokeEntry;
+
+                }, parameters, splitOn:"id,id");
+
+                return result.Distinct().ToList();
+            }
+        }
+
+        public async Task<PokemonMove> GetMoveDetail(string identifier)
+        {
+            var parameters = new { Identifier = identifier };
+            var sql = @"select  m.id as move_id, m.identifier, m.power, m.accuracy, m.pp, mft.flavor_text, t.identifier as type_identifier, mdc.identifier as category_identifier from moves m 
+                        join move_flavor_text mft on mft.move_id = m.id 
+                        join types t on t.id = m.type_id 
+                        join move_damage_classes mdc on mdc.id = m.damage_class_id 
+                        where m.identifier = @Identifier and mft.version_group_id = 20";
+
+            using (var connection = new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryFirstOrDefaultAsync<PokemonMove>(
+                    sql, parameters);
+                return result;
+            }
+        }
     }
 }

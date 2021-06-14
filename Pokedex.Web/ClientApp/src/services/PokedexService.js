@@ -16,6 +16,12 @@ class PokedexService {
     getAbilityByIdentifier(identifier) {
         return https.get(`/pokemon/ability/${identifier}`)
     }
+    getPokemonByMove(identifier) {
+        return https.get(`/pokemon/move/${identifier}`)
+    }
+    getMoveDetailByIdentifier(identifier) {
+        return https.get(`/pokemon/move/detail/${identifier}`)
+    }
     getStatsByIdentifier(identifier) {
         return https.get(`/pokemon/stats/${identifier}`)
     }

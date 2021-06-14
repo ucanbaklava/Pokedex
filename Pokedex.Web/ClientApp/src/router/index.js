@@ -3,6 +3,7 @@ import Home from "@/components/Home.vue";
 import Pokemon from "@/components/Pokemon/Pokemon.vue"
 import PokemonList from "@/components/Type/PokemonList.vue"
 import SingleAbility from "@/components/Abilities/SingleAbility.vue"
+import PokemonByMove from "@/components/Pokemon/PokemonByMove.vue"
 const routes = [
     {
         path: "/",
@@ -26,7 +27,13 @@ const routes = [
         name: "SingleAbility",
         component: SingleAbility,
         params: true,
-    }         
+    },
+    {
+        path: "/move/:identifier",
+        name: "PokemonByMove",
+        component: PokemonByMove,
+        params: true,
+    }                 
 ];
 
 const router = createRouter({

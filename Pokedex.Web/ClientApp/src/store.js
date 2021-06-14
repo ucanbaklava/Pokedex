@@ -14,7 +14,10 @@ export const store = createStore({
         detailedSearchResults: [],
         evolutionTree: null,
         pokemonListByType: null,
-        pokemonMovesByLevel: null
+        pokemonMovesByLevel: null,
+        pokemonByMove: null,
+        moveDetail: null
+
     },
     mutations: {
         SET_CURRENT_POKEMON(state, pokemon) {
@@ -46,7 +49,13 @@ export const store = createStore({
         },
         SET_POKEMON_MOVES_BY_LEVEL(state, data) {
             state.pokemonMovesByLevel = data
-        }             
+        },
+        SET_POKEMON_BY_MOVE(state, data) {
+            state.pokemonByMove = data
+        },
+        SET_MOVE_DETAIL(state, data) {
+            state.moveDetail = data
+        }       
     },
     getters: {
         currentPokemon(state) {
@@ -82,8 +91,14 @@ export const store = createStore({
         pokemonListByType(state) {
             return state.pokemonListByType
         },
+        moveDetail(state) {
+            return state.moveDetail
+        },
         pokemonMovesByLevel(state) {
             return state.pokemonMovesByLevel
+        },
+        pokemonByMove(state) {
+            return state.pokemonByMove
         },
         is_pokemon_loaded (state) {
             return !!state.currentPokemon
@@ -144,12 +159,24 @@ export const store = createStore({
                 commit('SET_EVOLUTION_TREE', result.data)
             })
         },     
-        getAbilitiesByLevel({commit}, identifier) {
+        getMovesByLevel({commit}, identifier) {
             commit('SET_POKEMON_MOVES_BY_LEVEL', null)
             return PokedexService.getMovesByLevel(identifier).then(result => {
                 commit('SET_POKEMON_MOVES_BY_LEVEL', result.data)
             })
-        },             
+        },           
+        getPokemonByMove({commit}, identifier) {
+            commit('SET_POKEMON_BY_MOVE', null)
+            return PokedexService.getPokemonByMove(identifier).then(result => {
+                commit('SET_POKEMON_BY_MOVE', result.data)
+            })
+        },       
+        getMoveDetail({commit}, identifier) {
+            commit('SET_MOVE_DETAIL', null)
+            return PokedexService.getMoveDetailByIdentifier(identifier).then(result => {
+                commit('SET_MOVE_DETAIL', result.data)
+            })
+        },    
         searchPokemon({commit}, identifier) {
             commit('SET_SEARCH_RESULTS', null)
             PokedexService.searchPokemonByIdentifier(identifier).then(result => {

@@ -16,6 +16,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "Run-Prod": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+       "applicationUrl": "http://localhost:50599"
+   },
     "Pokedex.Web": {
       "commandName": "Project",
       "launchBrowser": true,

@@ -23,22 +23,40 @@
       <flavor-text class="w-11/12" />
 
       <div class="flex flex-row w-11/12  flex-wrap	justify-around	">
-        <div class="md:w-2/5 w-full poke-data-box">
-          <pokedex-data />
-        </div>
+          <div class="md:w-2/5 w-full poke-data-box">
+              <pokedex-data />
+          </div>
 
-        <div class="md:w-2/5 w-full poke-data-box">
-          <stats />
-        </div>
-        <div class="w-full poke-data-box">
-          <evolution-tree />
-        </div>
-        <div class="md:w-2/5 w-full poke-data-box">
-          <breeding />
-        </div>
-        <div class="w-full poke-data-box">
-          <moves />
-        </div>
+          <div class="md:w-2/5 w-full poke-data-box">
+              <stats />
+          </div>
+          <div class="w-full poke-data-box">
+              <evolution-tree />
+          </div>
+          <div class="md:w-2/5 w-full poke-data-box">
+              <breeding />
+          </div>
+          <div class="w-full poke-data-box">
+              <moves type="1">
+                  <template v-slot:moves-title>
+                      <span class="font-bold text-2xl p-5 block text-center">Moves Learned By Leveling Up</span>
+                  </template>
+              </moves>
+          </div>
+          <div class="w-full poke-data-box">
+              <moves type="4">
+                  <template v-slot:moves-title>
+                      <span class="font-bold text-2xl p-5 block text-center">Moves Learned By Machine</span>
+                  </template>
+              </moves>
+          </div>
+          <div class="w-full poke-data-box">
+              <moves type="3">
+                  <template v-slot:moves-title>
+                      <span class="font-bold text-2xl p-5 block text-center">Moves Learned By Tutor</span>
+                  </template>
+              </moves>
+          </div>
       </div>
     </div>
   </div>
@@ -98,7 +116,7 @@ export default {
     store.dispatch("getStatsByIdentifier", to.params.identifier);
     store.dispatch("getGenderByIdentifier", to.params.identifier);
     store.dispatch("getFlavorTextByIdentifier", to.params.identifier);
-    store.dispatch("getAbilitiesByLevel", to.params.identifier);
+    store.dispatch("getMovesByLevel", to.params.identifier);
 
     await store
       .dispatch("getPokemonByIdentifier", to.params.identifier)
@@ -109,7 +127,7 @@ export default {
     store.dispatch("getStatsByIdentifier", to.params.identifier);
     store.dispatch("getGenderByIdentifier", to.params.identifier);
     store.dispatch("getFlavorTextByIdentifier", to.params.identifier);
-    store.dispatch("getAbilitiesByLevel", to.params.identifier);
+    store.dispatch("getMovesByLevel", to.params.identifier);
 
     await store
       .dispatch("getPokemonByIdentifier", to.params.identifier)

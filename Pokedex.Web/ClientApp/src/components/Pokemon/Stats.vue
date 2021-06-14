@@ -1,5 +1,5 @@
 <template>
-    <div class="w-1/2">
+    <div class="">
         <span class="text-3xl font-bold mb-10">Pokémon Stats</span>
 
         <div v-for="(stat, index) in currentStats" :key="index">

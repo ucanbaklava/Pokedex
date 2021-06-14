@@ -98,5 +98,17 @@ namespace Pokedex.Web.Controllers
             var data = await unitOfWork.Pokemons.GetPokemonMovesLevel(identifier);
             return Ok(data);
         }
+        [HttpGet("move/{identifier}")]
+        public async Task<IActionResult> GetPokemonByMove(string identifier)
+        {
+            var data = await unitOfWork.Pokemons.GetPokemonsByMove(identifier);
+            return Ok(data);
+        }
+        [HttpGet("move/detail/{identifier}")]
+        public async Task<IActionResult> GetMoveDetail(string identifier)
+        {
+            var data = await unitOfWork.Pokemons.GetMoveDetail(identifier);
+            return Ok(data);
+        }
     }
 }

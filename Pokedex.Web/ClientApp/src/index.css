@@ -208,4 +208,10 @@ html, body {
   .hero-steel {
     background: rgb(170, 170, 187);
   }
+  .hero-ice {
+    background: rgb(102, 204, 255);
+  }
+  .hero-fairy {
+    background: rgb(238, 153, 238);
+  }
 }

@@ -1,16 +1,11 @@
 <template>
-  <a
+  <router-link
     v-if="type != null"
-    href=""
-    @click.prevent="
-      $router.push({
-        name: 'PokemonList',
-        params: { identifier: type},
-      })
-    "
+    :to="{ name: 'PokemonList', params: { identifier: type } }"
     :class="['type-list-' + type]"
     class="type-icon leading-6"
-    >{{ normalizeString(type) }}</a
+  >
+    {{ normalizeString(type) }}</router-link
   >
 </template>
 
@@ -28,6 +23,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
