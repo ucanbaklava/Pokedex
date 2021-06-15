@@ -19,5 +19,6 @@ namespace Pokedex.Domain.Entities
         public string flavor_text { get; set; }
         public string type_identifier { get; set; }
         public string category_identifier { get; set; }
+        public string short_effect { get; set; }
     }
 }
