@@ -110,5 +110,20 @@ namespace Pokedex.Web.Controllers
             var data = await unitOfWork.Pokemons.GetMoveDetail(identifier);
             return Ok(data);
         }
+
+
+        [HttpGet("moves")]
+        public async Task<IActionResult> GetAllMoves()
+        {
+            var data = await unitOfWork.Moves.GetAllAsync();
+            return Ok(data);
+        }
+
+        [HttpGet("moves/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetMovesPaged(int pageNumber, int pageSize)
+        {
+            var data = await unitOfWork.Moves.GetAllPagedAsync(pageNumber, pageSize);
+            return Ok(data);
+        }
     }
 }

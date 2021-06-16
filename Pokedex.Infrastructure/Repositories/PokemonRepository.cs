@@ -507,5 +507,10 @@ namespace Pokedex.Infrastructure.Repositories
                 return result;
             }
         }
+
+        public Task<IReadOnlyList<Pokemon>> GetAllPagedAsync(int pageNumber, int pageSize)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

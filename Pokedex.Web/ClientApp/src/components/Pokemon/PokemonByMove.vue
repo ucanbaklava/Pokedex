@@ -11,7 +11,7 @@
       <div class="text-white font-bold">
         <!---->
         <h1 class=" ">
-          Pokémon which learns
+          Pokémon who learns
           <i>{{ normalize($route.params.identifier) }}</i>
         </h1>
       </div>
@@ -82,6 +82,7 @@ export default {
   computed: {
     ...mapGetters(["pokemonByMove"]),
   },
+  props:['hero-type'],
   beforeRouteEnter(to, from, next) {
     store.dispatch("getMoveDetail", to.params.identifier);
     store.dispatch("getPokemonByMove", to.params.identifier).then(() => next());

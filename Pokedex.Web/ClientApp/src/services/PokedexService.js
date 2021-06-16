@@ -37,6 +37,9 @@ class PokedexService {
     getMovesByLevel(identifier) {
         return https.get(`/pokemon/moves_level/${identifier}`)
     }
+    getAllMoves() {
+        return https.get(`/pokemon/moves`)
+    }
     searchPokemonByIdentifier(identifier) {
         return https.get(`/pokemon/search/${identifier}`)
     }

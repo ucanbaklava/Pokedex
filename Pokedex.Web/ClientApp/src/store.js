@@ -16,7 +16,8 @@ export const store = createStore({
         pokemonListByType: null,
         pokemonMovesByLevel: null,
         pokemonByMove: null,
-        moveDetail: null
+        moveDetail: null,
+        allMoves: []
 
     },
     mutations: {
@@ -55,6 +56,9 @@ export const store = createStore({
         },
         SET_MOVE_DETAIL(state, data) {
             state.moveDetail = data
+        },
+        SET_ALL_MOVES(state, data) {
+            state.allMoves = data
         }       
     },
     getters: {
@@ -99,6 +103,9 @@ export const store = createStore({
         },
         pokemonByMove(state) {
             return state.pokemonByMove
+        },
+        allMoves(state) {
+            return state.allMoves
         },
         is_pokemon_loaded (state) {
             return !!state.currentPokemon
@@ -176,7 +183,12 @@ export const store = createStore({
             return PokedexService.getMoveDetailByIdentifier(identifier).then(result => {
                 commit('SET_MOVE_DETAIL', result.data)
             })
-        },    
+        },   
+        getAllMoves({commit}) {
+            return PokedexService.getAllMoves().then(result => {
+                commit('SET_ALL_MOVES', result.data)
+            })        
+        }, 
         searchPokemon({commit}, identifier) {
             commit('SET_SEARCH_RESULTS', null)
             PokedexService.searchPokemonByIdentifier(identifier).then(result => {

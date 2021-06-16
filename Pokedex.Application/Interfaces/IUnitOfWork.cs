@@ -7,5 +7,6 @@ namespace Pokedex.Application.Interfaces
     public interface IUnitOfWork
     {
         IPokemonRepository Pokemons { get; }
+        IMoveRepository Moves { get; }
     }
 }
