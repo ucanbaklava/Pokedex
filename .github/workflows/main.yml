@@ -61,3 +61,12 @@ jobs:
           source: "pokedex/"
           target: "/var/www/pokedex/"
 
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          port: 22
+          key: ${{ secrets.KEY }} 
+          script: |
+            cp -r /var/www/pokedex/pokedex/ClientApp/* ../
