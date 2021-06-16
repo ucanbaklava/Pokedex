@@ -35,4 +35,16 @@ jobs:
         
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        
+      - name: dotnet publish
+        run:  dotnet publish -c Release -o pokedex 
+      - name: SCP Command to Transfer Files
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          port: 22
+          key: ${{ secrets.KEY }}
+          source: "pokedex/"
+          target: "/var/www/pokedex
 
