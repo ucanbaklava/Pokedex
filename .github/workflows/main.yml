@@ -69,4 +69,5 @@ jobs:
           port: 22
           key: ${{ secrets.KEY }} 
           script: |
-            cp -r /var/www/pokedex/pokedex/ClientApp/* ../
+            chown ubuntu /var/www/pokedex/pokedex/ClientApp/dist
+            cp -r /var/www/pokedex/pokedex/ClientApp/dist/* /var/www/pokedex/pokedex/ClientApp/
