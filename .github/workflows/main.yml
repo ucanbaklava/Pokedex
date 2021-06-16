@@ -46,5 +46,5 @@ jobs:
           port: 22
           key: ${{ secrets.KEY }}
           source: "pokedex/"
-          target: "/var/www/pokedex
+          target: "/var/www/pokedex"
 
