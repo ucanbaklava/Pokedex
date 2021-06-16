@@ -29,7 +29,7 @@
         ></path>
       </svg>
     </button>
-    <ul v-if="searchResults != null">
+    <ul v-if="searchResults != null"  class="absolute">
       <li v-for="result in searchResults" :key="result" class="shadow">
         <router-link @click="searchString = '' "
           :to="{ name: 'Pokemon', params: { identifier: result } }"
