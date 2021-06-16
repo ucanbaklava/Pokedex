@@ -38,6 +38,19 @@ jobs:
         
       - name: dotnet publish
         run:  dotnet publish -c Release -o pokedex 
+        
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          port: 22
+          key: ${{ secrets.KEY }} 
+          script: |
+            whoami
+            killall dotnet
+            rm -r /var/www/pokedex/pokedex
+
       - name: SCP Command to Transfer Files
         uses: appleboy/scp-action@v0.1.1
         with:
